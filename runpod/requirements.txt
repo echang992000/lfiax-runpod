@@ -5,10 +5,15 @@
 # wheel). Pin to 0.4.34 instead: same overall behavior on this stack,
 # clean cu12 plugin chain, no resolver headaches.
 
-# JAX with CUDA 12 GPU plugin. RunPod CUDA pods ship CUDA 12.x runtime;
-# `jax[cuda12]` pulls in matching jaxlib + the cuda plugin from PyPI.
-jax[cuda12]==0.4.34
+# JAX with CUDA 12 GPU plugin. We install the plugin *without* the
+# ``[with-cuda]`` extra to avoid pulling pip-managed nvidia-cudnn-cu12
+# (the plugin's [with-cuda] extra pins cuDNN 9.x, while torch 2.1.2
+# pins cuDNN 8.9 — conflict). Without [with-cuda] the plugin uses the
+# system CUDA/cuDNN that the RunPod PyTorch image already installs.
+jax==0.4.34
 jaxlib==0.4.34
+jax-cuda12-plugin==0.4.34
+jax-cuda12-pjrt==0.4.34
 ml_dtypes>=0.4.0,<0.6
 
 # Sampling / flow stack used by sir.py — versions that import cleanly
