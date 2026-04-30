@@ -1,0 +1,33 @@
+{
+  "problem_summary": "Scalar linear-Gaussian BOED with a distribution-parameterized design xi ~ TruncNormal(mu, sd) on [-2, 2].",
+  "backend": "lfiax",
+  "simulator_ref": "cli_anything.lfiax.examples.linear_problem:simulator",
+  "prior_sampler_ref": "cli_anything.lfiax.examples.linear_problem:prior",
+  "differentiable": true,
+  "design_variables": [
+    {"name": "xi", "lower": -2.0, "upper": 2.0}
+  ],
+  "observation_labels": ["y"],
+  "target_latent_labels": ["theta"],
+  "compute_budget": {
+    "num_outer_samples": 256,
+    "num_inner_samples": 10,
+    "num_optimization_steps": 200,
+    "design_learning_rate": 0.05,
+    "flow_learning_rate": 0.001
+  },
+  "objective": {
+    "name": "expected_information_gain",
+    "estimator": "lf_pce_eig_scan",
+    "estimator_kwargs": {"lam": 0.5}
+  },
+  "backend_options": {
+    "design_mode": "distribution",
+    "xi_mu_init": [0.25],
+    "xi_stddev_init": [0.5],
+    "xi_stddev_min": 0.001
+  },
+  "artifacts": {
+    "output_dir": "artifacts"
+  }
+}

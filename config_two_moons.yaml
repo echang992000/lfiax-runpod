@@ -1,0 +1,49 @@
+defaults:
+  - _self_
+
+seed: 0
+hpc: true
+wandb:
+  use_wandb: true
+  entity: vz_uci
+  project: uai_2026_2moons_final
+experiment:
+  save_name: "two_moons_params"
+simulator:
+  num_samples: 1_000
+flow_num_layers: 5
+mlp_num_layers: 2
+hidden_size: 128
+num_bins: 4
+batch_size: 512
+learning_rate: 1e-3
+sbc_n_samples: 256
+sbc_lambda: 10.0
+final_sbc_samples: 300
+final_sbc_num_sims: 1000
+
+pre_training:
+  loss_type: mi_loss
+  enabled: false
+  num_epochs: 1000
+
+main_training:
+  loss_type: mi_loss
+  num_epochs: 1000
+
+mi_params:
+  N: 512
+  M: 511
+  eig_lambda: 1e2
+
+hydra:
+  mode: RUN
+  run:
+    dir: .
+  sweep:
+    dir: /pub/vzaballa/lfiax_data/two_moons/sweep
+    subdir: ${hydra.job.num}
+  job:
+    chdir: true
+  launcher:
+    _target_: hydra._internal.core_plugins.basic_launcher.BasicLauncher

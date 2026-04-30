@@ -1,0 +1,49 @@
+defaults:
+  - override hydra/launcher: submitit_slurm
+
+version: '0.0.2'
+
+seed: 0
+
+experiment:
+  design_rounds: 3
+  true_theta: [0.85, 0.85]
+  device: "cuda"
+  hpc: true
+
+wandb:
+  use_wandb: true
+  entity: vz_uci
+  project: uai-bmp-minebed2
+
+minebed:
+  total_sim_budget: 100000
+  sim_call_budget: 10
+  datasize: null
+  batchsize: null
+  n_epoch: 10000
+  final_n_epoch: 20000
+  bo_init_num: 5
+  bo_max_num: 5
+  disable_gpyopt_early_stop: true
+  gpyopt_eps: 1e-5
+  nn_layers: 2
+  nn_hidden: 150
+
+designs:
+  d: null
+  xi: null
+  num_xi: 1
+  norm_type: "log"
+  xi_mu: 500.
+  xi_stddev: 300.
+  design_dist: true
+
+param_shapes:
+  theta_shape: 2
+  event_dim: 1
+
+hydra:
+  sweep:
+    dir: ./data/${version}
+    subdir: ${hydra.job.override_dirname}
